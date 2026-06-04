@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<!-- DOCTYPE html = verplichte declaratie: vertelt de browser dat dit een HTML5-document is -->
+<html lang="nl">
+<!-- html = het hoofd-element van de pagina | lang="nl" = het attribuut "lang" met waarde "nl" (Nederlands): vertelt browsers en screenreaders de taal -->
+<head>
+  <!-- head = het <head> element: bevat onzichtbare info over de pagina (geen zichtbare inhoud) -->
+
+  <meta charset="UTF-8" />
+  <!-- meta = een metadata-element | charset = het teken-codering attribuut | UTF-8 = ondersteunt alle talen en emoji | / = zelf-sluitend element (geen aparte sluit-tag nodig) -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- meta = metadata | name="viewport" = dit is de viewport-instelling | content = de waarde | width=device-width = de breedte van de pagina is gelijk aan de schermbreedtes van het apparaat | , = scheidt meerdere instellingen | initial-scale=1.0 = beginzoomfactor 1 (geen zoom) — zorgt ervoor dat de pagina correct schaalt op mobiel -->
+
+  <title>BITQUIZ — Interactieve Quizzes</title>
+  <!-- title = de paginatitel | tekst tussen de tags = de titel die in het browsertabblad en zoekmachines verschijnt -->
+
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- link = koppel een extern bestand | rel="stylesheet" = het is een stijlblad | href="css/style.css" = het pad naar het CSS-bestand | / = zelf-sluitend -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- preconnect = de browser maakt alvast verbinding met dit domein voordat het nodig is (sneller laden) | href = de URL -->
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- crossorigin = het attribuut dat aangeeft dat dit een cross-origin verzoek is (nodig voor Google Fonts) -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- href = de URL van het Google Fonts CSS-bestand | family=Poppins = het lettertype Poppins | : = scheider | wght@ = gewicht-selector | 300;400;500;600;700;800;900 = de gewichten die geladen worden (; = scheidt de gewichten) | & = URL-parameter scheider | display=swap = lettertype-weergave strategie: toon eerst een systeemlettertype en wissel naar Poppins zodra het geladen is -->
+</head>
+<!-- /head = sluit het head-element -->
+
+<body>
+<!-- body = het <body> element: alles wat de gebruiker ziet en waarmee hij interacteert staat hierin -->
+
+  <!-- PRELOADER -->
+  <!-- HTML-commentaar begint met een kleiner-dan teken, uitroepteken en twee koppeltekens. Het eindigt met twee koppeltekens en een groter-dan teken. Alles daartussen is onzichtbaar voor de gebruiker. -->
+  <div class="preloader" id="preloader">
+  <!-- div = een generiek container-element (geen semantische betekenis) | class="preloader" = CSS-klasse voor de stijl | id="preloader" = unieke identifier zodat JavaScript dit element kan vinden -->
+
+    <div class="puzzle-stage">
+    <!-- de container voor de vier puzzelstukjes -->
+
+      <div class="piece tl">B</div>
+      <!-- div = container | class="piece tl" = twee klassen: 'piece' (basistijl) en 'tl' (positie: top-left) | B = de inhoud (de letter B van BITQUIZ) | /div = sluit het element -->
+      <div class="piece tr">I</div>
+      <!-- class="piece tr" = top-right | I = de letter I -->
+      <div class="piece bl">T</div>
+      <!-- class="piece bl" = bottom-left | T = de letter T -->
+      <div class="piece br">?</div>
+      <!-- class="piece br" = bottom-right | ? = vraagteken (het logo-symbool) -->
+    </div>
+    <!-- /div = sluit puzzle-stage -->
+
+    <div class="brand">BIT<span class="accent">QUIZ</span></div>
+    <!-- div = container | class="brand" = stijlklasse | BIT = letterlijke tekst | span = inline container | class="accent" = gele streep onder de tekst (via CSS ::after) | QUIZ = tekst | /span = sluit span | /div = sluit brand -->
+
+    <div class="loading-dots"><span></span><span></span><span></span></div>
+    <!-- div.loading-dots = container voor de stipjes | span = drie lege spans (de drie animerende stipjes) — de stijl en animatie komen uit de CSS -->
+  </div>
+  <!-- /div = sluit preloader -->
+
+  <!-- HEADER / NAV -->
+  <header class="header">
+  <!-- header = semantisch element voor de koptekst van de pagina | class="header" = CSS-klasse -->
+
+    <div class="container header-inner">
+    <!-- div = container | class="container header-inner" = twee klassen: 'container' (centrering en breedte) en 'header-inner' (flex-layout) -->
+
+      <a href="#" class="logo" data-route="home">
+      <!-- a = anker-element (link) | href="#" = de URL (# = geen echte navigatie, wordt voorkomen door JavaScript) | class="logo" = CSS-klasse | data-route="home" = custom data-attribuut (begint altijd met "data-"): JavaScript gebruikt dit om te weten naar welke route dit verwijst -->
+
+        <span class="logo-mark">B</span>
+        <!-- span = inline container | class="logo-mark" = het gele blokje met de letter | B = de letter -->
+        <span>BIT<span class="accent">QUIZ</span></span>
+        <!-- span = container | BIT = tekst | span.accent = de tekst met gele streep | QUIZ = tekst | /span = sluit inner span | /span = sluit outer span -->
+      </a>
+      <!-- /a = sluit de logo-link -->
+
+      <nav class="nav">
+      <!-- nav = semantisch element voor navigatie | class="nav" = CSS-klasse -->
+
+        <a href="#" class="nav-link" data-route="home">Quizzes</a>
+        <!-- a = link | href="#" = geen echte URL | class="nav-link" = CSS-klasse | data-route="home" = route-data voor de JavaScript-router | Quizzes = de zichtbare linktekst | /a = sluit -->
+        <a href="#" class="nav-link" data-route="create">Maak quiz</a>
+        <!-- data-route="create" = navigeer naar het create-scherm -->
+        <a href="#" class="nav-link" data-route="leaderboard">Leaderboard</a>
+        <!-- data-route="leaderboard" = navigeer naar het leaderboard -->
+        <a href="#" class="nav-link" data-route="import">Importeren</a>
+        <!-- data-route="import" = navigeer naar het import-scherm -->
+      </nav>
+      <!-- /nav = sluit navigatie -->
+
+      <button class="menu-toggle" aria-label="Menu" id="menuToggle">☰</button>
+      <!-- button = een klikbare knop | class="menu-toggle" = CSS-klasse (standaard verborgen op desktop) | aria-label="Menu" = toegankelijkheidsattribuut: screenreaders lezen dit voor (het hamburger-symbool ☰ heeft anders geen betekenis) | id="menuToggle" = unieke id voor JavaScript | ☰ = het hamburger-symbool (drie horizontale lijnen) -->
+    </div>
+    <!-- /div = sluit header-inner -->
+  </header>
+  <!-- /header = sluit header -->
+
+  <!-- MAIN VIEW CONTAINER -->
+  <main id="app" class="container main"></main>
+  <!-- main = semantisch element voor de hoofdinhoud | id="app" = unieke id: JavaScript vult dit element met het juiste scherm | class="container main" = twee klassen voor opmaak | ></main> = leeg element: de inhoud wordt door JavaScript ingevoegd -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+  <!-- footer = semantisch element voor de voettekst -->
+    <div class="container">
+      <p>BITQUIZ</p>
+      <!-- p = paragraaf-element | BITQUIZ = de tekst | /p = sluit -->
+    </div>
+  </footer>
+  <!-- /footer = sluit footer -->
+
+  <!-- TEMPLATES -->
+  <!-- <template> = een speciaal HTML-element dat NIET gerenderd wordt door de browser.
+       De inhoud is "slapend" en wordt door JavaScript gekloneerd en in de pagina gezet.
+       Elke template heeft een id zodat JavaScript het juiste scherm kan vinden. -->
+
+  <!-- HOME / QUIZ OVERVIEW -->
+  <template id="tpl-home">
+  <!-- template = slapend HTML-blok | id="tpl-home" = de id die renderTemplate('tpl-home') gebruikt -->
+    <section class="hero">
+    <!-- section = semantisch blok voor een sectie | class="hero" = de hero-sectie stijl -->
+      <h1>Welkom bij <span class="accent">BITQUIZ</span></h1>
+      <!-- h1 = kopregel niveau 1 (de grootste) | Welkom bij = tekst | span.accent = QUIZ met gele streep eronder | /h1 = sluit -->
+      <p class="hero-sub">Speel quizzes, daag jezelf uit, maak je eigen quiz en deel ze met vrienden.</p>
+      <!-- p = paragraaf | class="hero-sub" = CSS-klasse voor de ondertitel -->
+    </section>
+    <section class="quiz-grid" id="quizGrid"></section>
+    <!-- section = container | class="quiz-grid" = het CSS grid-layout | id="quizGrid" = JavaScript voegt hier de kaarten in | leeg: JavaScript vult dit -->
+  </template>
+
+  <!-- QUIZ PLAY -->
+  <template id="tpl-play">
+    <section class="quiz-play">
+
+      <div class="quiz-top">
+        <div class="quiz-meta">
+          <h2 id="playTitle"></h2>
+          <!-- h2 = kopregel niveau 2 | id="playTitle" = JavaScript zet hier de quiz-titel in | leeg: wordt door JS gevuld -->
+          <p id="playSub"></p>
+          <!-- p = paragraaf | id="playSub" = ondertitel (vragen + tijd) | leeg: JS vult dit -->
+        </div>
+        <div class="timer">⏱ <span id="timerValue">00:00</span></div>
+        <!-- div.timer = de timer-weergave | ⏱ = stopwatch emoji | span = inline container | id="timerValue" = JavaScript werkt dit elke seconde bij | 00:00 = beginwaarde -->
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-info">
+          <span id="qCount"></span>
+          <!-- span = inline element | id="qCount" = JavaScript zet hier "Vraag X van Y" | leeg: JS vult dit -->
+          <span id="qPct"></span>
+          <!-- id="qPct" = het percentage (bijv. "30%") -->
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <!-- div.progress-bar = de grijze balk | div.progress-fill = de gekleurde vulling | id="progressFill" = JavaScript past style.width aan -->
+      </div>
+
+      <div class="question-card">
+        <div class="question-image" id="questionImage"></div>
+        <!-- div.question-image = container voor de afbeelding/SVG | id="questionImage" = JavaScript plaatst hier de foto of SVG | leeg: JS vult dit -->
+        <div class="question-body">
+          <h3 id="questionText"></h3>
+          <!-- h3 = kopregel niveau 3 | id="questionText" = JavaScript zet hier de vraagtekst -->
+          <div class="answers" id="answers"></div>
+          <!-- div.answers = container voor de antwoord-knoppen | id="answers" = JavaScript voegt hier de knoppen in -->
+        </div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-ghost" id="quitBtn">Stoppen</button>
+        <!-- button = knop | class="btn btn-ghost" = twee klassen: basisstijl + grijze variant | id="quitBtn" = JavaScript koppelt hier een klik-event aan | Stoppen = de knoptekst -->
+        <button class="btn btn-primary" id="nextBtn" disabled>Volgende →</button>
+        <!-- button = knop | class="btn btn-primary" = groene knop | id="nextBtn" = volgende-knop | disabled = HTML-attribuut: de knop is standaard uitgeschakeld (geen waarde nodig) | Volgende → = knoptekst met pijl -->
+      </div>
+
+    </section>
+  </template>
+
+  <!-- QUIZ RESULT -->
+  <template id="tpl-result">
+    <section class="result">
+      <div class="result-card">
+        <div class="result-emoji" id="resultEmoji">🎉</div>
+        <!-- div.result-emoji = de grote emoji | id="resultEmoji" = JavaScript vervangt dit | 🎉 = standaard emoji -->
+        <h2 id="resultTitle">Goed gedaan!</h2>
+        <!-- id="resultTitle" = JavaScript vervangt de tekst -->
+        <p class="result-score">Jouw score: <strong id="resultScore">0/0</strong> (<span id="resultPct">0%</span>)</p>
+        <!-- p = paragraaf | strong = vetgedrukt element | id="resultScore" = JavaScript vervangt met bijv. "7/10" | ( = letterlijk haakje | span = inline | id="resultPct" = JS vervangt met bijv. "70%" | ) = letterlijk sluit-haakje -->
+
+        <div class="save-score">
+          <label for="playerName">Bewaar je score in het leaderboard</label>
+          <!-- label = een formulier-label | for="playerName" = koppelt dit label aan het input-element met id="playerName" (klikken op het label activeert het invoerveld) -->
+          <div class="save-row">
+            <input id="playerName" type="text" placeholder="Voer je naam in (max 16)" maxlength="16" />
+            <!-- input = invoerveld (zelf-sluitend) | id="playerName" = unieke id | type="text" = tekst-invoerveld | placeholder = grijze hinttekst als het veld leeg is | maxlength="16" = maximaal 16 tekens -->
+            <button class="btn btn-primary" id="saveScoreBtn">Opslaan</button>
+            <!-- button = knop | id="saveScoreBtn" = JavaScript koppelt hier opslaan-logica aan -->
+          </div>
+          <p class="save-status" id="saveStatus"></p>
+          <!-- p.save-status = statustekst (succes of fout) | id="saveStatus" = JS vult dit | leeg: JS vult dit -->
+        </div>
+
+        <div class="result-actions">
+          <button class="btn btn-ghost" id="retryBtn">Opnieuw spelen</button>
+          <button class="btn btn-yellow" id="homeBtn">Terug naar overzicht</button>
+        </div>
+
+        <h3 class="feedback-title">Feedback per vraag</h3>
+        <!-- h3 = kopregel niveau 3 -->
+        <ol class="feedback-list" id="feedbackList"></ol>
+        <!-- ol = ordered list (genummerde lijst) | class="feedback-list" | id="feedbackList" = JavaScript voegt <li> elementen in | leeg: JS vult dit -->
+      </div>
+    </section>
+  </template>
+
+  <!-- CREATE QUIZ -->
+  <template id="tpl-create">
+    <section class="create">
+      <h2>📝 Maak je eigen quiz</h2>
+      <p class="create-intro">Vul de details in, voeg vragen toe en sla op of download als JSON.</p>
+
+      <div class="form-grid">
+        <!-- div.form-grid = CSS grid met drie kolommen -->
+        <label>Quiz titel
+          <!-- label = klikbare tekst gekoppeld aan een invoerveld (als er geen for-attribuut is, geldt het voor het eerste input-element erin) -->
+          <input type="text" id="cTitle" placeholder="Bijv. Mijn quiz over films" />
+          <!-- id="cTitle" = JavaScript leest dit veld uit | placeholder = hinttekst -->
+        </label>
+        <label>Beschrijving
+          <input type="text" id="cDesc" placeholder="Korte beschrijving" />
+        </label>
+        <label>Emoji
+          <input type="text" id="cEmoji" placeholder="🎬" maxlength="3" />
+          <!-- maxlength="3" = maximaal 3 tekens (één emoji kan meerdere tekens zijn) -->
+        </label>
+      </div>
+
+      <h3>Vragen</h3>
+      <div id="qBuilder" class="qbuilder"></div>
+      <!-- div = container | id="qBuilder" = JavaScript voegt hier vraagkaarten in | class="qbuilder" = CSS grid -->
+
+      <button class="btn btn-ghost" id="addQuestionBtn">+ Vraag toevoegen</button>
+      <!-- + = letterlijk plusteken in de knoptekst | id="addQuestionBtn" = JavaScript koppelt hier addQuestion() aan -->
+
+      <div class="create-actions">
+        <button class="btn btn-primary" id="saveQuizBtn">💾 Opslaan in BITQUIZ</button>
+        <!-- 💾 = diskette-emoji | id="saveQuizBtn" = opslaan-knop -->
+        <button class="btn btn-yellow" id="downloadQuizBtn">⬇ Download als JSON</button>
+        <!-- ⬇ = pijl-omlaag emoji | id="downloadQuizBtn" = download-knop -->
+      </div>
+      <p class="save-status" id="createStatus"></p>
+      <!-- id="createStatus" = JS toont hier succes- of foutmeldingen -->
+    </section>
+  </template>
+
+  <!-- LEADERBOARD -->
+  <template id="tpl-leaderboard">
+    <section class="leaderboard">
+      <h2>🏆 Leaderboard</h2>
+      <!-- 🏆 = trofee-emoji -->
+      <p>Top scores per quiz, opgeslagen op jouw apparaat.</p>
+      <div id="lbList" class="lb-list"></div>
+      <!-- id="lbList" = JavaScript voegt hier de tabellen per quiz in | leeg: JS vult dit -->
+      <button class="btn btn-ghost" id="clearLbBtn">Leaderboard leegmaken</button>
+      <!-- id="clearLbBtn" = JavaScript koppelt hier de wis-logica aan -->
+    </section>
+  </template>
+
+  <!-- IMPORT -->
+  <template id="tpl-import">
+    <section class="import">
+      <h2>📥 Quiz importeren</h2>
+      <!-- 📥 = inbox-emoji -->
+      <p>Upload een JSON-bestand met een quiz. Geldige bestanden worden direct toegevoegd aan je quizoverzicht.</p>
+      <label for="fileInput" class="dropzone">
+      <!-- label = het klikbare dropzone-element | for="fileInput" = koppelt aan het bestandsinvoerveld | class="dropzone" = de stijl voor het upload-vlak -->
+        <span>📁 Sleep een .json bestand hierheen of klik om te kiezen</span>
+        <!-- span = inline container met de instructietekst | 📁 = map-emoji -->
+        <input type="file" id="fileInput" accept="application/json" hidden />
+        <!-- input = bestandsinvoerveld | type="file" = bestandskiezer | id="fileInput" = unieke id | accept="application/json" = de browser toont alleen JSON-bestanden | hidden = het veld is onzichtbaar (het label met dropzone-stijl fungeert als klikgebied) -->
+      </label>
+      <p class="save-status" id="importStatus"></p>
+      <!-- id="importStatus" = JS toont hier succes- of foutmeldingen -->
+
+      <h3>JSON formaat voorbeeld</h3>
+<pre class="code"><code>{
+  "id": "mijn-quiz-id",
+  "title": "Mijn Quiz",
+  "description": "Korte uitleg",
+  "emoji": "🎨",
+  "questions": [
+    {
+      "question": "Wat is 2 + 2?",
+      "answers": ["3", "4", "5", "6"],
+      "correct": 1,
+      "image": "https://..."
+    }
+  ]
+}</code></pre>
+      <!-- pre = preformatted text: spaties en regeleinden worden letterlijk weergegeven | class="code" = donkere code-stijl | code = semantisch element voor code | { } = accolades tonen de JSON-structuur | "..." = stringwaarden | [ ] = arrays | , = scheidingstekens in JSON | : = koppelt sleutels aan waarden -->
+    </section>
+  </template>
+
+  <!-- SCRIPT-BESTANDEN -->
+  <!-- De volgorde is CRUCIAAL: elk bestand mag alleen functies gebruiken die eerder geladen zijn -->
+
+  <script src="js/quizzes.js"></script>
+  <!-- script = laad een JavaScript-bestand | src = het pad naar het bestand | js/quizzes.js = het bestand met de DEFAULT_QUIZZES array | ></script> = sluit het element (verplicht, ook al is het leeg) | 1. EERSTE: de data moet beschikbaar zijn voor de rest -->
+
+  <script src="js/storage.js"></script>
+  <!-- js/storage.js = localStorage functies (loadCustom, saveCustom, loadScores, saveScores) | 2. TWEEDE: opgeslagen data moet geladen kunnen worden -->
+
+  <script src="js/helpers.js"></script>
+  <!-- js/helpers.js = hulpfuncties (renderTemplate, $, $$, escapeHtml, formatTime, buildSvgImage, ...) | 3. DERDE: hulpfuncties voor de views -->
+
+  <script src="js/views/home.js"></script>
+  <!-- js/views/home.js = renderHome() | 4a. VIERDE: de view-functies -->
+
+  <script src="js/views/play.js"></script>
+  <!-- js/views/play.js = renderPlay(), showQuestion(), onSelect(), onNext() | 4b. -->
+
+  <script src="js/views/result.js"></script>
+  <!-- js/views/result.js = renderResult() | 4c. -->
+
+  <script src="js/views/create.js"></script>
+  <!-- js/views/create.js = renderCreate() | 4d. -->
+
+  <script src="js/views/leaderboard.js"></script>
+  <!-- js/views/leaderboard.js = renderLeaderboard() | 4e. -->
+
+  <script src="js/views/import.js"></script>
+  <!-- js/views/import.js = renderImport(), validateQuiz() | 4f. -->
+
+  <script src="js/app.js"></script>
+  <!-- js/app.js = allQuizzes, playState, timerInterval, routes, navigate(), INIT | 5. LAATSTE: de router en initialisatie — mag pas laden als alles hierboven beschikbaar is -->
+
+</body>
+<!-- /body = sluit body -->
+</html>
+<!-- /html = sluit het html-element — dit is het einde van de pagina -->

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head><meta charset="UTF-8"><title>Debug</title></head>
+<body>
+<pre id="out"></pre>
+<script src="js/quizzes.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/helpers.js"></script>
+<script src="js/views/home.js"></script>
+<script src="js/views/play.js"></script>
+<script src="js/views/result.js"></script>
+<script src="js/views/create.js"></script>
+<script src="js/views/leaderboard.js"></script>
+<script src="js/views/import.js"></script>
+<script src="js/app.js"></script>
+<script>
+const out = document.getElementById('out');
+const checks = [
+  ['DEFAULT_QUIZZES', typeof DEFAULT_QUIZZES !== 'undefined' ? '✅ ' + DEFAULT_QUIZZES.length + ' quizzes' : '❌ NIET GEVONDEN'],
+  ['allQuizzes', typeof allQuizzes !== 'undefined' ? '✅ ' + allQuizzes.length + ' quizzes' : '❌ NIET GEVONDEN'],
+  ['renderHome', typeof renderHome === 'function' ? '✅' : '❌'],
+  ['renderPlay', typeof renderPlay === 'function' ? '✅' : '❌'],
+  ['navigate', typeof navigate === 'function' ? '✅' : '❌'],
+  ['loadCustom', typeof loadCustom === 'function' ? '✅' : '❌'],
+  ['escapeHtml', typeof escapeHtml === 'function' ? '✅' : '❌'],
+];
+out.textContent = checks.map(([k,v]) => k + ': ' + v).join('\n');
+</script>
+</body>
+</html>

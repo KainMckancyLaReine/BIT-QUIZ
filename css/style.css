@@ -1,0 +1,880 @@
+/* =================== RESET / BASE ===================
+   Reset = standaard browser-stijlen wegnemen zodat alle
+   browsers er hetzelfde uitzien.
+   ===================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+/* * = universele selector: geldt voor ALLE elementen | , = scheidt meerdere selectors | *::before = de ::before pseudo-elementen van alle elementen | *::after = de ::after pseudo-elementen | { = open declaratieblok | box-sizing = CSS-eigenschap | : = koppelt eigenschap aan waarde | border-box = waarde: breedte en hoogte INCLUSIEF padding en border (standaard is content-box wat verwarrend is) | ; = scheidt CSS-declaraties | } = sluit blok */
+
+html, body { margin: 0; padding: 0; }
+/* html = selector voor het <html>-element | , = scheidt selectors | body = selector voor het <body>-element | { = open blok | margin: 0 = buitenmarge op 0 zetten | ; = scheidt declaraties | padding: 0 = binnenruimte op 0 | ; = scheidt | } = sluit */
+
+:root {
+  /* :root = de selector voor het hoofd-element van de pagina (<html>)
+     Hier definiëren we CSS-variabelen (ook wel "custom properties")
+     die overal in de CSS gebruikt kunnen worden met var(--naam) */
+
+  /* Bit Academy theme */
+  --bg: #F5F1E5; /* --bg = naam van de variabele (begint altijd met --) | : = koppeling | #F5F1E5 = hexadecimale kleurcode (licht beige) | ; = einde declaratie */
+  --bg-soft: #EFEAD8; /* zachter beige voor achtergronden */
+  --card: #FFFFFF; /* wit voor kaart-achtergronden */
+  --card-2: #ECE7D8; /* tweede kaartkleur */
+  --text: #0F1419; /* bijna-zwart voor tekst */
+  --text-soft: #3A3F4D; /* iets lichter donkerblauw voor secundaire tekst */
+  --muted: #6B7280; /* grijsblauw voor lichte tekst */
+  --line: #E2DCC9; /* beige voor randen en scheidingslijnen */
+
+  --yellow: #FFEB00; /* felle Bit Academy geel */
+  --yellow-dark: #F2D900; /* iets donkerder geel (voor schaduwen onder knoppen) */
+  --green: #1FBC6E; /* groen voor primaire knoppen en goede antwoorden */
+  --green-dark: #18A35E; /* donkerder groen (voor knop-schaduw) */
+  --blue: #4F7CF5; /* blauw voor het Rembrandt-thema */
+  --purple: #6366F1; /* paars (niet veel gebruikt) */
+  --pink: #EC4899; /* roze (niet veel gebruikt) */
+  --red: #EF4444; /* rood voor fouten en verkeerde antwoorden */
+
+  --shadow-sm: 0 2px 8px rgba(15, 20, 25, 0.06); /* kleine schaduw | 0 = horizontale offset | 2px = verticale offset | 8px = vervagingsstraal | rgba = kleur met doorzichtigheid | (15, 20, 25, 0.06) = R,G,B,Alpha — alpha 0.06 = zeer lichtdoorzichtig */
+  --shadow: 0 8px 30px rgba(15, 20, 25, 0.08); /* middelgrote schaduw */
+  --shadow-lg: 0 18px 60px rgba(15, 20, 25, 0.12); /* grote schaduw */
+  --radius: 16px; /* afgeronde hoeken voor kaarten */
+  --radius-lg: 24px; /* grotere afronding */
+}
+
+body {
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  /* font-family = het lettertype | : = koppeling | 'Poppins' = het hoofdlettertype (geladen via Google Fonts) | , = als Poppins niet beschikbaar is, probeer het volgende | system-ui = het systeem-lettertype van het OS | -apple-system = Apple-specifiek system font | Segoe UI = Windows | Roboto = Google/Android | sans-serif = generieke fallback (schreefloos lettertype) | ; = einde */
+  background: var(--bg); /* background = achtergrondkleur | var(--bg) = gebruik de CSS-variabele --bg (licht beige) */
+  background-image: radial-gradient(rgba(15,20,25,0.04) 1px, transparent 1px);
+  /* background-image = voeg een afbeeldingslaag toe (over background) | radial-gradient = circulair kleurverloop | rgba(15,20,25,0.04) = bijna-zwart met 4% doorzichtigheid | 1px = de kleurstop op 1px (stip van 1px) | , = naar volgende stop | transparent = doorzichtig | 1px = kleurstop op 1px — samen vormt dit een stippenpatroon */
+  background-size: 18px 18px; /* grootte van het herhalende patroon: 18px breed en 18px hoog */
+  color: var(--text); /* tekstkleur = de donkere kleur */
+  min-height: 100vh; /* minimale hoogte = 100% van de viewport (zichtbaar venster) | vh = viewport-height eenheden */
+  display: flex; /* flex = flexbox-layout: kinderen worden naast of onder elkaar gezet */
+  flex-direction: column; /* kolom-richting: kinderen gestapeld van boven naar beneden */
+  line-height: 1.55; /* regelafstand: 1.55 keer de lettergrootte */
+}
+
+.container {
+  /* .container = klasse-selector: geldt voor alle elementen met class="container" */
+  width: 100%; /* volledige breedte van het parent-element */
+  max-width: 1100px; /* maar nooit breder dan 1100 pixels */
+  margin: 0 auto; /* margin = buitenmarge | 0 = boven en onder | auto = links en rechts automatisch → centreert het element */
+  padding: 0 20px; /* padding = binnenruimte | 0 = boven en onder | 20px = links en rechts */
+}
+
+.main {
+  flex: 1; /* flex = groei-factor in een flex-container | 1 = neem alle beschikbare ruimte in → main vult de pagina */
+  padding: 28px 20px 60px; /* padding: boven rechts onder links (3 waarden: boven | links+rechts | onder) */
+}
+
+/* =================== HEADER =================== */
+.header {
+  background: rgba(245, 241, 229, 0.85); /* rgba = kleur met doorzichtigheid | 245,241,229 = licht beige RGB | 0.85 = 85% ondoorzichtig (15% doorzichtig) — het content eronder schijnt een beetje door */
+  backdrop-filter: blur(12px); /* backdrop-filter = filter op wat ACHTER het element staat | blur(12px) = vervaag de achtergrond met 12px — geeft een "frosted glass" effect */
+  border-bottom: 1px solid var(--line); /* border-bottom = alleen een onderrand | 1px = dikte | solid = doorgetrokken lijn | var(--line) = de beige kleur */
+  position: sticky; /* sticky = het element blijft plakken aan de bovenkant als je scrollt */
+  top: 0; /* plakt op 0px van de bovenkant van het scherm */
+  z-index: 50; /* z-index = stapelvolgorde: 50 = dit element ligt boven elementen met een lagere z-index */
+}
+.header-inner {
+  display: flex; /* flexbox */
+  align-items: center; /* vertic. uitlijnen: midden */
+  justify-content: space-between; /* horizontale verdeling: ruimte tussen de kinderen */
+  padding: 14px 20px; /* 14px boven/onder, 20px links/rechts */
+}
+.logo {
+  font-weight: 800; /* vetgedrukt (800 = extra bold) */
+  font-size: 1.45rem; /* rem = relatief aan de root-lettergrootte (standaard 16px) → 1.45 × 16 = ~23px */
+  color: var(--text); /* donkere kleur */
+  text-decoration: none; /* verwijder de standaard link-onderstreep */
+  display: flex; /* flexbox zodat het logo-blokje en tekst naast elkaar staan */
+  align-items: center; /* vertikaal gecentreerd */
+  gap: 10px; /* 10px ruimte tussen de kinderen */
+  letter-spacing: -0.02em; /* letter-spacing = ruimte tussen letters | -0.02em = iets dichter op elkaar (negatief = dichter) | em = relatief aan de huidige lettergrootte */
+}
+.logo-mark {
+  width: 38px; /* breedte */
+  height: 38px; /* hoogte */
+  background: var(--yellow); /* gele achtergrond */
+  border-radius: 10px; /* afgeronde hoeken */
+  display: inline-flex; /* inline flex: combineert inline en flex */
+  align-items: center; /* vertikaal gecentreerd */
+  justify-content: center; /* horizontaal gecentreerd */
+  font-size: 1.1rem; /* lettergrootte */
+  font-weight: 900; /* ultra-bold */
+  color: var(--text); /* donkere tekst */
+  position: relative; /* relative = dit element is een anker voor absoluut-gepositioneerde kinderen */
+  box-shadow: 0 4px 0 var(--yellow-dark); /* schaduw: 0px horizontaal, 4px naar beneden, 0px vervaging, donkerdere kleur — geeft een "3D knop" effect */
+}
+.accent {
+  color: var(--text); /* normale donkere kleur */
+  position: relative; /* nodig voor de ::after pseudo-element */
+}
+.accent::after {
+  /* ::after = pseudo-element dat ACHTER de tekst verschijnt maar vóór andere elementen */
+  content: ''; /* content = inhoud van het pseudo-element | '' = leeg: het pseudo-element bestaat maar heeft geen zichtbare tekst */
+  position: absolute; /* absolute = positioneer t.o.v. het dichtste gepositioneerde parent-element */
+  left: 0; /* begin links */
+  right: 0; /* ga tot rechts (strekt zich uit over de volle breedte) */
+  bottom: 2px; /* 2px boven de onderkant van de tekst */
+  height: 8px; /* 8px hoogte */
+  background: var(--yellow); /* gele achtergrond — dit is de gele streep achter de tekst */
+  z-index: -1; /* -1 = legt dit pseudo-element ACHTER de tekst */
+  border-radius: 4px; /* licht afgerond */
+}
+
+.nav { display: flex; gap: 6px; align-items: center; } /* flexbox met 6px tussenruimte */
+.nav-link {
+  color: var(--text-soft); /* zachte donkere kleur */
+  text-decoration: none; /* geen onderstreep */
+  font-weight: 600; /* half-vet */
+  transition: background .15s ease, color .15s ease; /* transition = animeer de wijziging | background = de achtergrond animeren | .15s = duur 0.15 seconden | ease = versnellingscurve (begint snel, eindigt langzaam) | , = meerdere transities | color = ook de tekstkleur animeren */
+  font-size: 0.95rem; /* iets kleiner dan standaard */
+  padding: 8px 14px; /* binnenruimte */
+  border-radius: 999px; /* extreem grote waarde = volledig ronde hoeken (pill shape) */
+}
+.nav-link:hover { background: rgba(15,20,25,0.05); } /* :hover = als de muis eroverheen staat | licht donkere achtergrond bij hover */
+.nav-link.active {
+  background: var(--yellow); /* gele achtergrond voor de actieve link */
+  color: var(--text); /* donkere tekst */
+}
+.menu-toggle {
+  display: none; /* standaard verborgen (alleen zichtbaar op mobiel via @media query hieronder) */
+  background: transparent; /* geen achtergrond */
+  border: 0; /* geen rand */
+  color: var(--text); /* donkere kleur */
+  font-size: 1.5rem; /* groot voor de hamburger */
+  cursor: pointer; /* hand-cursor bij hover */
+}
+
+/* =================== HERO =================== */
+.hero {
+  text-align: center; /* tekst horizontaal gecentreerd */
+  padding: 36px 0 18px; /* boven 36px, links/rechts 0, onder 18px */
+}
+.hero h1 {
+  font-size: clamp(2rem, 4.5vw, 3rem); /* clamp(min, gewenst, max) = de lettergrootte is minimaal 2rem, ideaal 4.5vw (4.5% van de viewport-breedte), maximaal 3rem — schaalt mee met het scherm */
+  margin: 0 0 10px; /* boven 0, links/rechts 0, onder 10px */
+  font-weight: 800; /* extra bold */
+  letter-spacing: -0.02em; /* dichter op elkaar */
+}
+.hero-sub {
+  color: var(--muted); /* grijze tekst */
+  font-size: 1.05rem; /* iets groter dan standaard */
+  max-width: 640px; /* niet breder dan 640px */
+  margin: 0 auto; /* gecentreerd */
+}
+
+/* =================== QUIZ GRID =================== */
+.quiz-grid {
+  display: grid; /* grid-layout: verdeelt de ruimte in kolommen en rijen */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* kolommen automatisch aanmaken | auto-fill = vul zoveel kolommen als er passen | minmax(280px, 1fr) = elke kolom is minimaal 280px en maximaal 1fr (gelijke verdeling) */
+  gap: 20px; /* 20px ruimte tussen de cellen */
+  margin-top: 28px; /* 28px ruimte boven het grid */
+}
+.quiz-card {
+  background: var(--card); /* witte achtergrond */
+  border: 1px solid var(--line); /* 1px beige rand */
+  border-radius: var(--radius); /* afgeronde hoeken */
+  padding: 24px; /* binnenruimte */
+  display: flex; /* flexbox */
+  flex-direction: column; /* kolom-richting */
+  gap: 8px; /* 8px tussen kinderen */
+  position: relative; /* anker voor absoluut-gepositioneerde children (badge) */
+  cursor: pointer; /* hand-cursor: geeft aan dat dit klikbaar is */
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; /* animeer drie eigenschappen */
+  box-shadow: var(--shadow-sm); /* kleine schaduw */
+}
+.quiz-card:hover {
+  transform: translateY(-4px); /* verschuif 4px omhoog bij hover */
+  box-shadow: var(--shadow); /* grotere schaduw */
+  border-color: var(--text); /* donkere rand */
+}
+.quiz-card .emoji-wrap {
+  /* .quiz-card .emoji-wrap = alleen .emoji-wrap BINNEN een .quiz-card (descendant selector) */
+  width: 56px;
+  height: 56px;
+  background: var(--yellow); /* gele achtergrond */
+  border-radius: 14px; /* afgerond */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem; /* grote emoji */
+  margin-bottom: 6px;
+  box-shadow: 0 3px 0 var(--yellow-dark); /* 3D-effect schaduw */
+}
+.quiz-card h3 {
+  margin: 4px 0; /* 4px boven en onder, 0 links/rechts */
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.quiz-card .desc { color: var(--muted); font-size: 0.92rem; margin: 0; }
+.quiz-card .meta {
+  display: flex;
+  justify-content: space-between; /* linker en rechter span zo ver mogelijk uit elkaar */
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line); /* scheidingslijn boven de meta-info */
+  font-weight: 500;
+}
+.quiz-card .badge {
+  position: absolute; /* absoluut gepositioneerd t.o.v. .quiz-card (die position: relative heeft) */
+  top: 14px; /* 14px van bovenkant van de kaart */
+  right: 14px; /* 14px van rechterkant */
+  font-size: 0.7rem;
+  background: var(--text); /* donkere achtergrond */
+  color: var(--bg); /* lichte tekst */
+  padding: 4px 10px;
+  border-radius: 999px; /* pill shape */
+  font-weight: 700;
+  text-transform: uppercase; /* alle letters hoofdletters */
+  letter-spacing: 0.04em; /* iets meer ruimte tussen letters (positief = verder uit elkaar) */
+}
+.quiz-card .badge.custom {
+  background: var(--green); /* groene badge voor eigen quizzes */
+  color: white;
+}
+
+/* =================== BUTTONS =================== */
+.btn {
+  display: inline-flex; /* inline-flex: neemt alleen de ruimte in die nodig is */
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0; /* geen rand */
+  border-radius: 999px; /* volledig rond */
+  padding: 13px 24px;
+  font-weight: 700;
+  font-family: inherit; /* inherit = gebruik hetzelfde lettertype als het parent-element */
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform .15s ease, opacity .15s ease, background .15s ease, box-shadow .15s ease;
+  letter-spacing: -0.01em;
+}
+.btn:active { transform: translateY(1px); } /* :active = als de knop ingedrukt wordt | verschuif 1px naar beneden voor klik-effect */
+.btn:disabled { opacity: 0.45; cursor: not-allowed; } /* :disabled = als de knop uitgeschakeld is | 45% zichtbaar | cursor: not-allowed = verbod-cursor */
+.btn-primary {
+  background: var(--green);
+  color: white;
+  box-shadow: 0 4px 0 var(--green-dark); /* groene schaduw 4px naar beneden → 3D-knop */
+}
+.btn-primary:hover:not(:disabled) {
+  /* :hover:not(:disabled) = bij hover, maar NIET als de knop disabled is */
+  background: var(--green-dark);
+  box-shadow: 0 2px 0 var(--green-dark); /* kleinere schaduw → knop lijkt "ingedrukt" */
+  transform: translateY(2px); /* 2px naar beneden → knop "zakt in" */
+}
+.btn-yellow {
+  background: var(--yellow);
+  color: var(--text);
+  box-shadow: 0 4px 0 var(--yellow-dark);
+}
+.btn-yellow:hover:not(:disabled) {
+  background: var(--yellow-dark);
+  box-shadow: 0 2px 0 var(--yellow-dark);
+  transform: translateY(2px);
+}
+.btn-ghost {
+  background: var(--card); /* witte achtergrond */
+  color: var(--text);
+  border: 1px solid var(--line); /* zichtbare rand */
+}
+.btn-ghost:hover {
+  background: var(--bg-soft);
+  border-color: var(--text);
+}
+
+/* =================== QUIZ PLAY =================== */
+.quiz-play { max-width: 780px; margin: 0 auto; } /* maximale breedte en gecentreerd */
+.quiz-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* bovenaan uitlijnen */
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.quiz-meta h2 {
+  margin: 0 0 4px; /* 0 boven, 0 links/rechts, 4px onder */
+  font-size: 1.7rem;
+  letter-spacing: -0.02em;
+}
+.quiz-meta p { margin: 0; color: var(--muted); }
+.timer {
+  background: var(--yellow);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 0 var(--yellow-dark);
+}
+
+.progress-wrap { margin-bottom: 22px; }
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.progress-bar {
+  background: var(--line); /* beige achtergrond = de "lege" balk */
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden; /* verberg wat buiten de balk valt */
+}
+.progress-fill {
+  background: var(--text); /* donkere "volle" balk */
+  height: 100%; /* vult de volledige hoogte van de balk */
+  width: 0%; /* begint bij 0% breed (JavaScript past dit aan) */
+  border-radius: 999px;
+  transition: width .35s ease; /* animeer de breedte-wijziging over 0.35 seconden */
+}
+
+.question-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0; /* geen padding: de afbeelding moet de rand raken */
+  overflow: hidden; /* afgeronde hoeken ook op het afbeelding-element */
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.question-image {
+  width: 100%;
+  height: 240px; /* vaste hoogte voor de afbeelding */
+  background: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.question-image svg, .question-image img {
+  /* , = meerdere selectors: zowel SVG als IMG elementen */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* object-fit: cover = vul de ruimte, bijsnijden als nodig (verhouding behouden) */
+  display: block; /* block: verwijdert de standaard inline-ruimte onder afbeeldingen */
+}
+.question-body { padding: 28px; }
+.question-body h3 {
+  margin: 0 0 20px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.4; /* regelafstand: 1.4 keer de lettergrootte */
+}
+.answers {
+  display: grid;
+  gap: 10px; /* 10px tussen de antwoord-knoppen */
+}
+.answer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg);
+  border: 2px solid var(--line); /* 2px rand */
+  padding: 14px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .12s ease;
+  text-align: left; /* tekst links uitlijnen */
+  font-size: 1rem;
+  color: var(--text);
+  font-family: inherit;
+  font-weight: 500;
+  width: 100%; /* volledige breedte */
+}
+.answer:hover:not(:disabled) {
+  background: var(--bg-soft);
+  border-color: var(--text);
+}
+.answer .letter {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  flex-shrink: 0; /* flex-shrink: 0 = dit element mag niet kleiner worden dan zijn basisgrootte */
+}
+.answer.selected {
+  background: var(--yellow); /* geel als geselecteerd */
+  border-color: var(--text);
+}
+.answer.selected .letter {
+  background: var(--text); /* donkere achtergrond voor het letter-blokje */
+  color: var(--yellow); /* gele letter */
+  border-color: var(--text);
+}
+.answer.correct {
+  background: rgba(31, 188, 110, 0.15); /* licht groen met 15% doorzichtigheid */
+  border-color: var(--green);
+}
+.answer.correct .letter {
+  background: var(--green);
+  color: white;
+  border-color: var(--green);
+}
+.answer.wrong {
+  background: rgba(239, 68, 68, 0.12); /* licht rood met 12% doorzichtigheid */
+  border-color: var(--red);
+}
+.answer.wrong .letter {
+  background: var(--red);
+  color: white;
+  border-color: var(--red);
+}
+.answer:disabled { cursor: default; } /* default = normale pijl-cursor als de knop uitgeschakeld is */
+
+.quiz-actions {
+  display: flex;
+  justify-content: space-between; /* stop- en volgende-knop aan tegenovergestelde zijden */
+  gap: 12px;
+}
+
+/* =================== RESULT =================== */
+.result { max-width: 780px; margin: 0 auto; }
+.result-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 40px 28px; /* 40px boven/onder, 28px links/rechts */
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.result-emoji { font-size: 4rem; margin-bottom: 8px; } /* grote emoji */
+.result-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.9rem;
+  letter-spacing: -0.02em;
+}
+.result-score {
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin: 8px 0 24px; /* 8px boven, 0 links/rechts, 24px onder */
+}
+.result-score strong { color: var(--text); font-size: 1.5rem; } /* strong = vetgedrukt element | grotere lettergrootte voor de score */
+
+.save-score {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  margin: 0 auto 22px; /* 0 boven, auto links/rechts (gecentreerd), 22px onder */
+  max-width: 480px;
+  text-align: left;
+}
+.save-score label {
+  display: block; /* block: neemt volledige breedte in, staat op eigen regel */
+  margin-bottom: 10px;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.save-row { display: flex; gap: 8px; }
+.save-row input { flex: 1; } /* flex: 1 = neem alle beschikbare ruimte in (knop krijgt vaste breedte) */
+
+.save-status {
+  font-size: 0.88rem;
+  color: var(--green); /* standaard groen (succes) */
+  margin: 8px 0 0; /* 8px boven, 0 links/rechts, 0 onder */
+  min-height: 1em; /* minimale hoogte = 1 regelafstand (reserveert ruimte ook als leeg) */
+  font-weight: 600;
+}
+.save-status.error { color: var(--red); } /* rood bij fout */
+
+.result-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap; /* wrap = knoppen mogen naar de volgende regel als er niet genoeg ruimte is */
+}
+
+.feedback-title {
+  text-align: left;
+  font-size: 1.2rem;
+  margin: 24px 0 14px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line); /* scheidingslijn boven de feedbacksectie */
+  font-weight: 700;
+}
+.feedback-list {
+  text-align: left;
+  padding: 0; /* verwijder standaard lijst-inspringing */
+  margin: 0;
+  list-style: none; /* verwijder de standaard lijst-bolletjes */
+  display: grid;
+  gap: 10px;
+}
+.feedback-item {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-left: 4px solid; /* 4px dikke linkerrand (kleur ingesteld door .good/.bad) */
+  padding: 14px 16px;
+  border-radius: 12px;
+}
+.feedback-item.good { border-left-color: var(--green); } /* groene linkerrand = juist beantwoord */
+.feedback-item.bad { border-left-color: var(--red); } /* rode linkerrand = fout beantwoord */
+.feedback-q { font-weight: 700; margin-bottom: 4px; }
+.feedback-a { color: var(--text-soft); font-size: 0.9rem; margin: 0; }
+.feedback-a strong { color: var(--text); } /* strong binnen .feedback-a = donkere kleur voor het antwoord */
+
+/* =================== INPUTS =================== */
+input[type="text"], input[type="number"], textarea, select {
+  /* input[type="text"] = attribuut-selector: alleen <input> elementen met type="text" */
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  width: 100%;
+  transition: border-color .15s ease, background .15s ease;
+}
+input:focus, textarea:focus, select:focus {
+  /* :focus = als het element de "focus" heeft (d.w.z. de gebruiker typt erin) */
+  outline: none; /* verwijder de standaard blauwe focusring van de browser */
+  border-color: var(--text); /* donkere rand als visueel focusindicator */
+}
+
+/* =================== CREATE =================== */
+.create { max-width: 820px; margin: 0 auto; }
+.create h2 {
+  margin: 0 0 6px;
+  font-size: 1.8rem;
+  letter-spacing: -0.02em;
+}
+.create-intro { color: var(--muted); margin: 0 0 24px; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 140px; /* drie kolommen: twee gelijke + één vaste van 140px | 1fr = 1 fractie van de beschikbare ruimte */
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.form-grid label {
+  display: flex;
+  flex-direction: column; /* label-tekst boven het invoerveld */
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.qbuilder {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.q-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.q-card-top {
+  display: flex;
+  justify-content: space-between; /* vraagnummer links, verwijder-knop rechts */
+  align-items: center;
+  margin-bottom: 12px;
+}
+.q-card-top h4 { margin: 0; font-size: 1rem; font-weight: 700; }
+.q-card .remove {
+  background: transparent;
+  border: 0;
+  color: var(--red); /* rode kleur voor de verwijder-knop */
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.q-card .answers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* twee gelijke kolommen voor de 4 antwoorden */
+  gap: 10px;
+  margin-top: 10px;
+}
+.q-card .answer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.q-card .answer-row input[type="radio"] {
+  accent-color: var(--green); /* accent-color = de kleur van het aangevinkte radio-rondje */
+}
+
+.create-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* knoppen mogen naar nieuwe regel */
+  margin-top: 12px;
+}
+
+/* =================== LEADERBOARD =================== */
+.leaderboard { max-width: 820px; margin: 0 auto; }
+.leaderboard h2 {
+  margin: 0 0 6px;
+  font-size: 1.8rem;
+  letter-spacing: -0.02em;
+}
+.lb-list {
+  display: grid;
+  gap: 18px;
+  margin: 22px 0; /* 22px boven en onder */
+}
+.lb-section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.lb-section h3 {
+  margin: 0 0 14px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-weight: 700;
+}
+.lb-table {
+  width: 100%;
+  border-collapse: collapse; /* border-collapse: collapse = samenvouwen van tabelranden (geen dubbele randen) */
+}
+.lb-table th, .lb-table td {
+  padding: 10px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--line); /* lijn onder elke rij */
+  font-size: 0.92rem;
+}
+.lb-table th { color: var(--muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; } /* kolomkoppen in grijze kleine hoofdletters */
+.lb-table .rank {
+  width: 40px; /* vaste breedte voor de rang-kolom */
+  font-weight: 800;
+}
+.lb-table tr:first-child .rank { color: var(--yellow-dark); } /* tr:first-child = de eerste rij (eerste plaats = goudkleurig getal) */
+.lb-table .score { text-align: right; font-weight: 700; } /* score rechts uitlijnen */
+.lb-empty { color: var(--muted); font-style: italic; } /* italic = schuingedrukt */
+
+/* =================== IMPORT =================== */
+.import { max-width: 820px; margin: 0 auto; }
+.import h2 {
+  margin: 0 0 6px;
+  font-size: 1.8rem;
+  letter-spacing: -0.02em;
+}
+.dropzone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--text); /* dashed = stippellijn */
+  background: var(--yellow);
+  padding: 44px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin: 18px 0;
+  text-align: center;
+  color: var(--text);
+  font-weight: 600;
+  transition: background .15s ease;
+}
+.dropzone:hover { background: var(--yellow-dark); }
+.dropzone.dragover { background: var(--yellow-dark); } /* .dragover = klasse die JavaScript toevoegt tijdens slepen */
+pre.code {
+  background: var(--text); /* donkere achtergrond voor code */
+  border-radius: 12px;
+  padding: 16px;
+  overflow-x: auto; /* horizontaal scrollen als de code te breed is */
+  font-size: 0.85rem;
+  color: var(--yellow); /* gele tekst op donkere achtergrond */
+}
+
+/* =================== FOOTER =================== */
+.footer {
+  border-top: 1px solid var(--line);
+  padding: 18px 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* =================== RESPONSIVE =================== */
+@media (max-width: 720px) {
+  /* @media = media query: pas stijlen ALLEEN toe als de schermbreedtes <= 720px is | max-width: 720px = maximale breedte voor dit blok (mobiel/tablet) */
+  .menu-toggle { display: inline-block; } /* hamburger zichtbaar maken op mobiel */
+  .nav {
+    position: absolute; /* loskoppelen van de normale documentstroom */
+    top: 70px; /* 70px van de bovenkant van het scherm (onder de header) */
+    right: 12px; /* 12px van de rechterkant */
+    flex-direction: column; /* verticaal menu op mobiel */
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 14px;
+    border-radius: 12px;
+    gap: 6px;
+    display: none; /* standaard verborgen op mobiel */
+    box-shadow: var(--shadow);
+    align-items: stretch; /* stretch = links en rechts uitrekken */
+  }
+  .nav.open { display: flex; } /* .open = klasse die JavaScript toevoegt bij hamburger-klik: maak het menu zichtbaar */
+  .form-grid { grid-template-columns: 1fr; } /* één kolom op mobiel */
+  .q-card .answers-grid { grid-template-columns: 1fr; } /* één kolom voor antwoorden op mobiel */
+  .quiz-top { flex-direction: column; align-items: flex-start; } /* timer onder de quiz-info */
+  .save-row { flex-direction: column; } /* naam-veld en knop onder elkaar */
+  .save-row .btn { width: 100%; } /* knop volledige breedte */
+  .question-image { height: 180px; } /* lagere afbeelding op mobiel */
+  .question-body { padding: 20px; } /* minder padding */
+}
+
+/* =================== ANIMATIONS =================== */
+@keyframes fadeIn {
+  /* @keyframes = declareer een animatie met de naam fadeIn | de browser berekent tussenstappen automatisch */
+  from { opacity: 0; transform: translateY(8px); } /* from = beginstatus: onzichtbaar en 8px naar beneden verschoven */
+  to { opacity: 1; transform: translateY(0); } /* to = eindstatus: volledig zichtbaar op normale positie */
+}
+.main > * { animation: fadeIn .25s ease; }
+/* .main > * = DIRECTE kinderen van .main | > = child-combinator: alleen directe kinderen, niet genestelde | * = alle elementen
+   animation: fadeIn = gebruik de fadeIn animatie | .25s = duur 0.25 seconden | ease = versnellingscurve */
+
+/* =================== PRELOADER =================== */
+.preloader {
+  position: fixed; /* fixed = altijd op dezelfde positie in het venster, ook bij scrollen */
+  inset: 0; /* inset = alle vier zijden: top, right, bottom, left = 0 — vult het hele scherm */
+  background: var(--bg);
+  background-image: radial-gradient(rgba(15,20,25,0.04) 1px, transparent 1px);
+  background-size: 18px 18px;
+  z-index: 9999; /* extreem hoge z-index: bovenop alles */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  transition: opacity .45s ease, visibility .45s ease; /* animeer zichtbaarheid */
+}
+.preloader.hide {
+  opacity: 0; /* volledig doorzichtig */
+  visibility: hidden; /* visibility: hidden = onzichtbaar EN neemt geen klik-events aan */
+  pointer-events: none; /* pointer-events: none = de muis "passeert" door dit element heen */
+}
+
+.puzzle-stage {
+  width: 220px;
+  height: 220px;
+  position: relative; /* anker voor de absolute stukjes */
+}
+
+.piece {
+  position: absolute; /* elk stukje absoluut gepositioneerd in .puzzle-stage */
+  width: 100px;
+  height: 100px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 2.4rem;
+  color: var(--text);
+  animation-duration: 1.6s; /* duur van de infly-animatie */
+  animation-fill-mode: forwards; /* forwards = behoud de eindstatus na de animatie */
+  animation-timing-function: cubic-bezier(.34,1.56,.64,1); /* cubic-bezier = aangepaste versnellingscurve die een kleine "veerschommeling" geeft aan het einde */
+  box-shadow: 0 6px 0 rgba(0,0,0,0.08);
+}
+
+/* Piece positions when assembled */
+.piece.tl { top: 0; left: 0; background: var(--yellow); } /* tl = top-left: linksboven */
+.piece.tr { top: 0; right: 0; background: var(--green); color: white; } /* tr = top-right: rechtsboven */
+.piece.bl { bottom: 0; left: 0; background: var(--text); color: var(--yellow); } /* bl = bottom-left: linksonder */
+.piece.br { bottom: 0; right: 0; background: var(--blue); color: white; } /* br = bottom-right: rechtsonder */
+
+/* Notches simulate puzzle pieces */
+.piece::before, .piece::after {
+  /* ::before en ::after = pseudo-elementen: het zijn de "uitsteeksels" van de puzzelstukjes */
+  content: ''; /* verplicht leeg voor pseudo-elementen */
+  position: absolute;
+  background: inherit; /* inherit = gebruik dezelfde achtergrondkleur als het parent .piece element */
+  border-radius: 50%; /* volledig rond = cirkel */
+  width: 22px;
+  height: 22px;
+}
+/* Elk stukje heeft een uitsteeksel (::before) en een inkeping (::after of --bg kleur) */
+.piece.tl::before { right: -11px; top: 50%; transform: translateY(-50%); } /* uitsteeksel rechts van tl: -11px = half buiten het stukje */
+.piece.tr::before { left: -11px; top: 50%; transform: translateY(-50%); background: var(--bg); } /* inkeping links van tr: --bg kleur "snijdt" erin */
+.piece.bl::before { right: -11px; top: 50%; transform: translateY(-50%); }
+.piece.br::before { left: -11px; top: 50%; transform: translateY(-50%); background: var(--bg); }
+.piece.tl::after { bottom: -11px; left: 50%; transform: translateX(-50%); }
+.piece.tr::after { bottom: -11px; left: 50%; transform: translateX(-50%); }
+.piece.bl::after { top: -11px; left: 50%; transform: translateX(-50%); background: var(--bg); }
+.piece.br::after { top: -11px; left: 50%; transform: translateX(-50%); background: var(--bg); }
+
+/* Elk stukje heeft zijn eigen infly-animatie vanuit een hoek */
+@keyframes flyTL {
+  0% { transform: translate(-180px, -160px) rotate(-25deg); opacity: 0; } /* 0% = beginstatus: ver links en boven, gedraaid, onzichtbaar */
+  60% { transform: translate(0,0) rotate(4deg); opacity: 1; } /* 60% = bijna op positie, ietsje gedraaid (veer-effect) */
+  100% { transform: translate(0,0) rotate(0); opacity: 1; } /* 100% = eindpositie: exacte positie, recht */
+}
+@keyframes flyTR {
+  0% { transform: translate(180px, -160px) rotate(25deg); opacity: 0; } /* van rechts en boven */
+  60% { transform: translate(0,0) rotate(-4deg); opacity: 1; }
+  100% { transform: translate(0,0) rotate(0); opacity: 1; }
+}
+@keyframes flyBL {
+  0% { transform: translate(-180px, 160px) rotate(25deg); opacity: 0; } /* van links en onder */
+  60% { transform: translate(0,0) rotate(-4deg); opacity: 1; }
+  100% { transform: translate(0,0) rotate(0); opacity: 1; }
+}
+@keyframes flyBR {
+  0% { transform: translate(180px, 160px) rotate(-25deg); opacity: 0; } /* van rechts en onder */
+  60% { transform: translate(0,0) rotate(4deg); opacity: 1; }
+  100% { transform: translate(0,0) rotate(0); opacity: 1; }
+}
+
+.piece.tl { animation-name: flyTL; animation-delay: 0.0s; } /* animation-name = welke @keyframes | animation-delay = wacht dit lang voor de start */
+.piece.tr { animation-name: flyTR; animation-delay: 0.15s; } /* 0.15 seconden later dan tl */
+.piece.bl { animation-name: flyBL; animation-delay: 0.3s; } /* 0.3 seconden later */
+.piece.br { animation-name: flyBR; animation-delay: 0.45s; } /* 0.45 seconden later — elk stukje vliegt na het vorige in */
+
+.brand {
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  opacity: 0; /* begin onzichtbaar */
+  animation: brandIn 0.6s ease 1.1s forwards; /* brandIn animatie | 0.6s duur | ease versnellingscurve | 1.1s vertraging | forwards = behoud eindstatus */
+}
+.brand .accent::after { background: var(--yellow); }
+
+@keyframes brandIn {
+  from { opacity: 0; transform: translateY(10px); } /* begin: onzichtbaar en 10px naar beneden */
+  to { opacity: 1; transform: translateY(0); } /* eind: zichtbaar en op positie */
+}
+
+.loading-dots {
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  animation: brandIn 0.6s ease 1.3s forwards; /* verschijnt 1.3 seconden na start */
+}
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%; /* volledig rond */
+  background: var(--text);
+  animation: dotPulse 1.2s ease-in-out infinite; /* infinite = animatie herhaalt eindeloos */
+}
+.loading-dots span:nth-child(2) { animation-delay: 0.15s; } /* :nth-child(2) = het tweede span-element | vertraging voor volgend stip */
+.loading-dots span:nth-child(3) { animation-delay: 0.3s; } /* derde stip: 0.3s vertraging */
+
+@keyframes dotPulse {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } /* 0%, 80%, 100% = op drie punten tegelijk | scale(0.6) = 60% van de normale grootte | opacity: 0.4 = 40% zichtbaar */
+  40% { transform: scale(1); opacity: 1; } /* op 40% van de animatie: volle grootte en volledig zichtbaar */
+}
