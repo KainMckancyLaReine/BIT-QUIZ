@@ -1,0 +1,25 @@
+{
+  "name": "BITQUIZ — Interactieve Quizzes",
+  "short_name": "BITQUIZ",
+  "description": "Maak en speel interactieve quizzes.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f3f0e1",
+  "theme_color": "#f3f0e1",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

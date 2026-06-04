@@ -14,6 +14,25 @@
   <title>BITQUIZ — Interactieve Quizzes</title>
   <!-- title = de paginatitel | tekst tussen de tags = de titel die in het browsertabblad en zoekmachines verschijnt -->
 
+  <!-- App-icoon / PWA: zorgt dat het puzzel-logo het app-icoon wordt als je de site op je telefoon "toevoegt aan beginscherm" -->
+  <link rel="manifest" href="manifest.json" />
+  <!-- manifest = bestand met app-info (naam, kleuren, iconen) zodat de site als app installeerbaar is -->
+
+  <meta name="theme-color" content="#f3f0e1" />
+  <!-- theme-color = de kleur van de browser-/statusbalk op mobiel -->
+
+  <link rel="icon" type="image/png" href="icons/favicon.png" />
+  <!-- icon = het favicon dat in het browsertabblad verschijnt -->
+
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <!-- apple-touch-icon = het app-icoon op iPhone/iPad bij "Zet op beginscherm" -->
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <!-- laat de site op iOS als volledig-scherm app openen -->
+
+  <meta name="apple-mobile-web-app-title" content="BITQUIZ" />
+  <!-- de naam die onder het app-icoon verschijnt op iPhone -->
+
   <link rel="stylesheet" href="css/style.css" />
   <!-- link = koppel een extern bestand | rel="stylesheet" = het is een stijlblad | href="css/style.css" = het pad naar het CSS-bestand | / = zelf-sluitend -->
 
