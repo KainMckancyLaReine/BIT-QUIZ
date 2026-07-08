@@ -6,7 +6,8 @@
 
 var STORAGE_KEYS = {
   CUSTOM: 'qm_custom_quizzes', // dit is de naam waarmee eigen quizzes worden opgeslagen in de browser
-  SCORES: 'qm_scores'          // dit is de naam waarmee de leaderboard-scores worden opgeslagen in de browser
+  SCORES: 'qm_scores',         // dit is de naam waarmee de leaderboard-scores worden opgeslagen in de browser
+  THEME:  'qm_theme'           // dit is de naam waarmee de gekozen kleurmodus (licht/donker) wordt opgeslagen
 };
 
 // --- Eigen quizzes ophalen uit de browser ---
@@ -35,4 +36,14 @@ function loadScores() {
 // --- Scores opslaan in de browser ---
 function saveScores(obj) {
   localStorage.setItem(STORAGE_KEYS.SCORES, JSON.stringify(obj)); // zet het scores-object om naar tekst en slaat het permanent op in de browser — dit is de regel die de score écht bewaart zodat hij zichtbaar is in het leaderboard
+}
+
+// --- Kleurmodus (licht/donker) ophalen uit de browser ---
+function loadTheme() {
+  return localStorage.getItem(STORAGE_KEYS.THEME) || 'light'; // geeft 'light' terug als er nog nooit een keuze opgeslagen is, zodat de app altijd een geldige waarde heeft
+}
+
+// --- Kleurmodus opslaan in de browser ---
+function saveTheme(theme) {
+  localStorage.setItem(STORAGE_KEYS.THEME, theme); // slaat 'light' of 'dark' op zodat de keuze onthouden wordt bij een volgend bezoek
 }

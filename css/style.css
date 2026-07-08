@@ -40,6 +40,29 @@ html, body { margin: 0; padding: 0; }
   --radius-lg: 24px; /* grotere afronding */
 }
 
+/* =================== DONKERE MODUS ===================
+   [data-theme="dark"] = attribuut-selector: geldt zodra JavaScript (app.js, applyTheme())
+   het attribuut data-theme="dark" op <html> zet. Alle kleurvariabelen hierboven worden
+   hier opnieuw gedefinieerd — de rest van de CSS blijft ongewijzigd, want die gebruikt
+   overal var(--naam) in plaats van vaste kleuren. Dat is precies het voordeel van
+   CSS-variabelen: één keer overschrijven, overal effect. */
+[data-theme="dark"] {
+  --bg: #14171C; /* donkere achtergrond in plaats van het lichte beige */
+  --bg-soft: #1C2028; /* iets lichter donker voor secundaire achtergronden */
+  --card: #1E222A; /* donkere kaart-achtergrond in plaats van wit */
+  --card-2: #262B35; /* tweede donkere kaartkleur */
+  --text: #F3F0E1; /* lichte tekst op de donkere achtergrond */
+  --text-soft: #C7CBD4; /* iets gedempter lichte tekst voor secundaire informatie */
+  --muted: #8B93A3; /* grijsblauw, ook in donkere modus goed leesbaar */
+  --line: #2E333D; /* donkere scheidingslijnen in plaats van beige */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35); /* schaduwen worden donkerder/sterker zodat ze nog zichtbaar zijn op een donkere achtergrond */
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 18px 60px rgba(0, 0, 0, 0.5);
+}
+[data-theme="dark"] body { background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px); } /* het stippenpatroon wordt lichtjes wit in plaats van zwart, anders zou het onzichtbaar zijn op de donkere achtergrond */
+[data-theme="dark"] .header { background: rgba(20, 23, 28, 0.85); } /* de doorschijnende header krijgt dezelfde donkere basiskleur als de rest */
+[data-theme="dark"] .preloader { background: var(--bg); background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px); }
+
 body {
   font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   /* font-family = het lettertype | : = koppeling | 'Poppins' = het hoofdlettertype (geladen via Google Fonts) | , = als Poppins niet beschikbaar is, probeer het volgende | system-ui = het systeem-lettertype van het OS | -apple-system = Apple-specifiek system font | Segoe UI = Windows | Roboto = Google/Android | sans-serif = generieke fallback (schreefloos lettertype) | ; = einde */
@@ -145,6 +168,149 @@ body {
   color: var(--text); /* donkere kleur */
   font-size: 1.5rem; /* groot voor de hamburger */
   cursor: pointer; /* hand-cursor bij hover */
+}
+.theme-toggle {
+  width: 38px; /* zelfde formaat als .logo-mark, zodat de header visueel in balans blijft */
+  height: 38px;
+  border-radius: 999px; /* volledig rond knopje */
+  border: 1px solid var(--line);
+  background: var(--card);
+  cursor: pointer;
+  font-size: 1.05rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px; /* kleine ruimte tussen de navigatielinks en dit knopje */
+  transition: background .15s ease, transform .15s ease;
+  flex-shrink: 0; /* mag niet kleiner worden geknepen door de flex-layout van .header-inner */
+}
+.theme-toggle:hover { background: var(--bg-soft); transform: translateY(-2px); }
+
+/* =================== ZOEKEN & FILTEREN =================== */
+.filter-bar {
+  display: flex; /* zoekveld en categorie-knopjes op één rij (of onder elkaar op mobiel, zie media query) */
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 22px;
+}
+.quiz-search {
+  /* gebruikt dezelfde basisstijl als input[type=text] hierboven, met een iets ruimere binnenkant */
+  padding: 14px 18px;
+  border-radius: 999px; /* pil-vorm, past bij de rest van de "chip"-achtige elementen in de app */
+  font-size: 1rem;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap; /* de knopjes mogen naar een nieuwe regel springen als ze niet meer passen */
+  gap: 8px;
+}
+.chip {
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text-soft);
+  padding: 8px 16px;
+  border-radius: 999px; /* pil-vorm */
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.chip:hover { border-color: var(--text); }
+.chip.active {
+  background: var(--text); /* de actieve categorie krijgt de donkere kleur als achtergrond... */
+  color: var(--bg);        /* ...en de achtergrondkleur als tekst, zodat het contrasteert */
+  border-color: var(--text);
+}
+
+/* =================== QUIZ VAN DE DAG =================== */
+.daily-quiz {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  background: linear-gradient(135deg, var(--yellow), var(--yellow-dark)); /* linear-gradient = vloeiende overgang tussen twee kleuren | 135deg = richting van de overgang (diagonaal) */
+  border-radius: var(--radius-lg);
+  padding: 22px 26px;
+  margin-top: 24px;
+  cursor: pointer;
+  position: relative;
+  box-shadow: var(--shadow);
+  transition: transform .18s ease;
+}
+.daily-quiz:hover { transform: translateY(-3px); }
+.daily-badge {
+  position: absolute;
+  top: -12px; /* steekt half boven de kaart uit */
+  left: 24px;
+  background: var(--text);
+  color: var(--yellow);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.daily-body { display: flex; align-items: center; gap: 16px; }
+.daily-body .emoji-wrap {
+  width: 56px; height: 56px;
+  background: var(--card);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+.daily-body h3 { margin: 0 0 4px; font-size: 1.25rem; color: var(--text); }
+.daily-body .desc { margin: 0; color: rgba(15,20,25,0.7); font-size: 0.92rem; }
+
+/* =================== STATISTIEKEN =================== */
+.stats { max-width: 900px; margin: 0 auto; }
+.stats h2 { margin: 0 0 6px; font-size: 1.8rem; letter-spacing: -0.02em; }
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* auto-fit = net als auto-fill, maar lege kolommen worden opgevuld door de bestaande kaarten zodat ze mooi uitrekken */
+  gap: 14px;
+  margin: 22px 0;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.stat-value { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; }
+.stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 4px; font-weight: 500; }
+
+/* =================== CONFETTI =================== */
+.confetti-layer {
+  position: fixed; /* ligt boven de hele pagina, ongeacht scroll-positie */
+  inset: 0;
+  pointer-events: none; /* pointer-events: none = klikken "vallen er doorheen" naar de knoppen eronder */
+  overflow: hidden;
+  z-index: 9998; /* net onder de preloader (9999), maar boven al de rest */
+}
+.confetti-piece {
+  position: absolute;
+  top: -20px; /* begint net boven het scherm */
+  width: 9px;
+  height: 14px;
+  opacity: 0.9;
+  animation-name: confettiFall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(540deg); opacity: 0.8; } /* valt tot voorbij de onderkant van het scherm, met anderhalve rotatie (540 graden) voor een "fladderend" effect */
+}
+
+@media (max-width: 720px) {
+  .theme-toggle { margin-left: auto; margin-right: 6px; } /* op mobiel schuift het knopje naast de hamburger, met ruimte ertussen */
+  .daily-quiz { flex-direction: column; align-items: stretch; }
 }
 
 /* =================== HERO =================== */

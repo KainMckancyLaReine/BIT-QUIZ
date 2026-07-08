@@ -42,11 +42,23 @@ function escapeAttr(str) {
 }
 
 // --- Kleurthema's voor de SVG-kaarten ---
+// Elk nieuw quiz-thema heeft hier zijn eigen regel nodig: buildSvgImage() zoekt het thema
+// op via THEMES[theme] en valt terug op 'amsterdam' als de naam niet bestaat.
 var THEMES = {
-  amsterdam: { bg: '#FFEB00', dot: '#0F1419', accent: '#0F1419', shape: '#F2D900' }, // geel thema voor de Amsterdam-quiz
-  rembrandt: { bg: '#4F7CF5', dot: '#FFEB00', accent: '#FFFFFF', shape: '#3B62D6' }, // blauw thema voor de Rembrandt-quiz
-  ww2:       { bg: '#0F1419', dot: '#FFEB00', accent: '#FFEB00', shape: '#1F2532' }, // donker thema voor de WO2-quiz
-  custom:    { bg: '#1FBC6E', dot: '#FFEB00', accent: '#FFFFFF', shape: '#18A35E' }  // groen thema voor eigen gemaakte quizzes
+  amsterdam:  { bg: '#FFEB00', dot: '#0F1419', accent: '#0F1419', shape: '#F2D900' }, // geel thema voor de Amsterdam-quiz
+  rembrandt:  { bg: '#4F7CF5', dot: '#FFEB00', accent: '#FFFFFF', shape: '#3B62D6' }, // blauw thema voor de Rembrandt-quiz
+  ww2:        { bg: '#0F1419', dot: '#FFEB00', accent: '#FFEB00', shape: '#1F2532' }, // donker thema voor de WO2-quiz
+  custom:     { bg: '#1FBC6E', dot: '#FFEB00', accent: '#FFFFFF', shape: '#18A35E' }, // groen thema voor eigen gemaakte quizzes
+  history:    { bg: '#D97706', dot: '#1F2937', accent: '#FFFFFF', shape: '#B45309' }, // brons/amber thema voor Wereldgeschiedenis
+  geography:  { bg: '#0EA5E9', dot: '#FFFFFF', accent: '#FFFFFF', shape: '#0284C7' }, // hemelsblauw thema voor Aardrijkskunde
+  space:      { bg: '#1E1B4B', dot: '#FFEB00', accent: '#FFEB00', shape: '#312E81' }, // donker ruimteblauw thema voor Ruimtevaart
+  science:    { bg: '#6366F1', dot: '#FFEB00', accent: '#FFFFFF', shape: '#4F46E5' }, // paars/indigo thema voor Wetenschap
+  sport:      { bg: '#EF4444', dot: '#FFFFFF', accent: '#FFFFFF', shape: '#B91C1C' }, // rood thema voor Sport
+  music:      { bg: '#EC4899', dot: '#FFFFFF', accent: '#FFFFFF', shape: '#BE185D' }, // roze thema voor Muziek
+  film:       { bg: '#1F2937', dot: '#FBBF24', accent: '#FBBF24', shape: '#374151' }, // donker/goud thema voor Film & Hollywood
+  tech:       { bg: '#06B6D4', dot: '#0F1419', accent: '#FFFFFF', shape: '#0891B2' }, // cyaan thema voor Technologie
+  nature:     { bg: '#16A34A', dot: '#FFEB00', accent: '#FFFFFF', shape: '#15803D' }, // bosgroen thema voor Dieren & Natuur
+  food:       { bg: '#F97316', dot: '#FFFFFF', accent: '#FFFFFF', shape: '#C2410C' }  // oranje thema voor Eten & Drinken
 };
 
 // --- Bouw een SVG-afbeelding met de kleuren van het thema en een emoji ---
@@ -69,6 +81,24 @@ function buildSvgImage(theme, emoji) {
         <text x="0" y="22" text-anchor="middle" font-size="100" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif">${emoji}</text>
       </g>
     </svg>`; // geeft de volledige SVG terug als tekst met de thema-kleuren en de emoji verwerkt, zodat het als afbeelding op het scherm getoond kan worden
+}
+
+// --- Vier een perfecte score met een korte confetti-animatie ---
+function fireConfetti() {
+  const colors = ['#FFEB00', '#1FBC6E', '#4F7CF5', '#EF4444', '#EC4899']; // de kleuren die de vallende confetti-snippers mogen hebben, passend bij het kleurenpalet van de app
+  const container = document.createElement('div'); // maakt een nieuwe container aan die over de hele pagina heen ligt
+  container.className = 'confetti-layer'; // CSS zorgt dat deze laag "position: fixed" over alles heen ligt zonder klikken te blokkeren
+  for (let i = 0; i < 60; i++) { // maakt 60 losse confetti-snippers aan
+    const piece = document.createElement('span'); // elk snippertje is een eigen inline-element
+    piece.className = 'confetti-piece'; // CSS regelt de vorm en de val-animatie
+    piece.style.left = Math.random() * 100 + 'vw'; // Math.random() = willekeurig getal tussen 0 en 1 | * 100 = willekeurige positie tussen 0 en 100vw (volledige schermbreedte)
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)]; // kiest willekeurig één van de vijf kleuren
+    piece.style.animationDelay = (Math.random() * 0.6) + 's'; // laat de snippers niet allemaal precies gelijk beginnen te vallen, voor een natuurlijker effect
+    piece.style.animationDuration = (2.2 + Math.random() * 1.4) + 's'; // elke snipper valt met een iets andere snelheid
+    container.appendChild(piece); // voegt de snipper toe aan de confetti-laag
+  }
+  document.body.appendChild(container); // plaatst de hele confetti-laag op de pagina zodat de animatie zichtbaar wordt
+  setTimeout(() => container.remove(), 3800); // verwijdert de confetti-laag na 3,8 seconden weer uit de pagina, zodat er geen onzichtbare elementen achterblijven
 }
 
 // --- Zet een afbeelding in een container, met SVG als reserveoptie ---

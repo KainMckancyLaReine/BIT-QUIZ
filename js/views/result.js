@@ -11,7 +11,7 @@ function renderResult() {
   const pct   = Math.round((score / total) * 100); // berekent het scorepercentage door de behaalde score te delen door het totaal en met 100 te vermenigvuldigen
 
   let emoji = '🎉', title = 'Goed gedaan!'; // standaard emoji en titel als de score tussen 40% en 60% ligt
-  if (pct === 100) { emoji = '🏆'; title = 'Perfect! Wat een topscore!'; }         // bij een perfecte score
+  if (pct === 100) { emoji = '🏆'; title = 'Perfect! Wat een topscore!'; fireConfetti(); } // bij een perfecte score wordt ook een korte confetti-animatie afgevuurd (zie fireConfetti() in helpers.js)
   else if (pct >= 80) { emoji = '🌟'; title = 'Indrukwekkend!'; }                  // bij 80% of hoger
   else if (pct >= 60) { emoji = '👍'; title = 'Netjes gedaan!'; }                  // bij 60% of hoger
   else if (pct >= 40) { emoji = '💪'; title = 'Niet slecht — probeer nog eens!'; } // bij 40% of hoger

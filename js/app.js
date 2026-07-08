@@ -13,6 +13,22 @@ const appEl      = document.getElementById('app'); // zoekt het hoofdelement op 
 const navLinks   = document.querySelectorAll('.nav-link'); // zoekt alle navigatielinks op zodat ze later klikbaar gemaakt kunnen worden
 const menuToggle = document.getElementById('menuToggle'); // zoekt de hamburgerknop op voor het mobiele menu
 const navEl      = document.querySelector('.nav'); // zoekt de navigatiebalk op zodat die geopend en gesloten kan worden
+const themeToggle = document.getElementById('themeToggle'); // zoekt de knop op waarmee de gebruiker tussen licht en donker kan wisselen
+
+// --- Donkere modus toepassen en onthouden ---
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme; // zet data-theme="dark" of "light" op <html>, de CSS in style.css reageert hierop via [data-theme="dark"] selectors
+  if (themeToggle) themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙'; // toont een zon-icoon als je NAAR licht kan wisselen, en een maan-icoon als je NAAR donker kan wisselen
+  saveTheme(theme); // onthoudt de keuze zodat die blijft staan bij een volgend bezoek
+}
+applyTheme(loadTheme()); // past bij het opstarten meteen de eerder gekozen kleurmodus toe (of 'light' als er nog niets gekozen is)
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => { // luistert naar de klik op de knop
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; // bepaalt de tegenovergestelde modus van de huidige
+    applyTheme(next); // wisselt naar die tegenovergestelde modus
+  });
+}
 
 // --- Verberg de preloader nadat de pagina volledig geladen is ---
 window.addEventListener('load', () => {
@@ -35,7 +51,8 @@ const routes = {
   result:      renderResult,      // als er naar 'result' genavigeerd wordt roept de router renderResult() aan
   create:      renderCreate,      // als er naar 'create' genavigeerd wordt roept de router renderCreate() aan
   leaderboard: renderLeaderboard, // als er naar 'leaderboard' genavigeerd wordt roept de router renderLeaderboard() aan
-  import:      renderImport       // als er naar 'import' genavigeerd wordt roept de router renderImport() aan
+  import:      renderImport,      // als er naar 'import' genavigeerd wordt roept de router renderImport() aan
+  stats:       renderStats        // als er naar 'stats' genavigeerd wordt roept de router renderStats() aan
 };
 
 let currentRoute = 'home'; // houdt bij op welk scherm de gebruiker zich op dit moment bevindt

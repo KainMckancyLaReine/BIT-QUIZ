@@ -286,6 +286,103 @@ index.html
         views/result.js      →  renderResult()
         views/create.js      →  renderCreate()
         views/leaderboard.js →  renderLeaderboard()
+        views/stats.js       →  renderStats()
         views/import.js      →  renderImport(), validateQuiz()
         app.js               →  allQuizzes, playState, routes, navigate() — LAATSTE
 ```
+
+---
+
+## 🚀 UPDATE — Van 3 quizzes naar een volwaardig quizplatform
+
+Deze update maakt BITQUIZ een stuk groter en vollediger. Hieronder staat precies wat er is
+toegevoegd en in welk bestand je het terugvindt.
+
+### 📦 js/quizzes.js — van 3 naar 13 quizzes
+
+- **10 nieuwe quizzes** toegevoegd naast de bestaande 3: Wereldgeschiedenis, Aardrijkskunde
+  van de Wereld, Ruimtevaart, Wetenschap, Sport Algemeen, Muziekgeschiedenis, Filmgeschiedenis
+  & Hollywood, Technologie, Dieren & Natuur, Eten & Drinken. Samen goed voor **130 vragen**.
+- Elke quiz heeft nu twee **nieuwe velden**:
+  - `category` — de categorienaam (bijv. `'Ruimtevaart'`), gebruikt door de zoek-/filterbalk
+    op het startscherm.
+  - `difficulty` — `'makkelijk'`, `'gemiddeld'` of `'moeilijk'`, getoond als gekleurde badge
+    op de quiz-kaart (🟢/🟡/🔴, zie `DIFFICULTY_LABELS` in `views/home.js`).
+- **Echte foto's**: veel vragen hebben nu een `imageUrl` die naar een echte foto van
+  Wikimedia Commons wijst, via de kleine hulpfunctie `wm(bestandsnaam)` bovenaan het bestand.
+  `wm()` bouwt een `Special:FilePath`-link op (`commons.wikimedia.org/wiki/Special:FilePath/...`)
+  — dat is de "veilige" manier om naar een Commons-bestand te linken, omdat je geen
+  ingewikkeld hash-pad hoeft te kennen: Wikimedia zoekt de echte locatie zelf op en stuurt de
+  browser door. Als een specifieke foto ooit verdwenen of hernoemd is, springt de app
+  automatisch terug naar de mooie gegenereerde SVG-illustratie — dat vangnet zat al in
+  `renderQuestionImage()` in `helpers.js` en werkt hier dus meteen mee.
+
+### 🎨 js/helpers.js — twee toevoegingen
+
+- **`THEMES`** heeft 10 nieuwe kleurthema's gekregen (`history`, `geography`, `space`,
+  `science`, `sport`, `music`, `film`, `tech`, `nature`, `food`) — één per nieuwe
+  quizcategorie, zodat elke quiz zijn eigen sfeer heeft in de gegenereerde SVG-afbeeldingen.
+- **`fireConfetti()`** — een nieuwe functie die 60 gekleurde "confetti-snippers" op het scherm
+  laat vallen via CSS-animatie. Wordt aangeroepen vanuit `views/result.js` bij een score van
+  100%. Ruimt zichzelf na 3,8 seconden weer op.
+
+### 💾 js/storage.js — kleurmodus onthouden
+
+- Nieuwe sleutel `STORAGE_KEYS.THEME` (`'qm_theme'`) en twee functies: `loadTheme()` en
+  `saveTheme(theme)`. Hiermee onthoudt de browser of je licht of donker gekozen hebt.
+
+### ⚙️ js/app.js — donkere modus + nieuwe route
+
+- **Donkere modus**: `applyTheme(theme)` zet `data-theme="dark"` (of `"light"`) op
+  `<html>` — alle kleuren in `style.css` zijn opgebouwd met CSS-variabelen, dus deze ene
+  regel verandert de kleur van de hele app in één keer. Gekoppeld aan de nieuwe knop
+  `#themeToggle` in de header (🌙 ⇄ ☀️).
+  - Bij het opstarten wordt meteen de eerder opgeslagen keuze toegepast, zodat je niet
+    steeds opnieuw hoeft te wisselen.
+- **Nieuwe route**: `routes.stats = renderStats`, gekoppeld aan het nieuwe navigatie-item
+  "Statistieken".
+
+### 🏠 js/views/home.js — zoeken, filteren, quiz van de dag, moeilijkheidsgraad
+
+Volledig herschreven met vier nieuwe onderdelen:
+
+| Onderdeel | Wat het doet |
+|---|---|
+| `pickDailyQuiz(list)` | Kiest via het huidige dagnummer van het jaar (`% list.length`) elke dag een andere "quiz van de dag" — deterministisch, dus iedereen op hetzelfde apparaat ziet dezelfde quiz totdat de volgende dag begint |
+| Zoekbalk (`#quizSearch`) | Filtert live (bij elke toetsaanslag) op titel én beschrijving |
+| Categorie-knopjes (`#categoryFilters`) | Worden automatisch opgebouwd uit alle `category`-waarden die in `allQuizzes` voorkomen, plus een "Alle"-knop |
+| Moeilijkheidsbadge | Toont 🟢 Makkelijk / 🟡 Gemiddeld / 🔴 Moeilijk op elke kaart, via `DIFFICULTY_LABELS` |
+
+Zoeken en filteren werken samen (een quiz moet aan **beide** voorwaarden voldoen) en
+herbouwen alleen de kaarten-grid, niet de hele pagina — zo verlies je nooit de focus in het
+zoekveld terwijl je typt.
+
+### 📊 js/views/stats.js — nieuw bestand
+
+Bevat één functie, `renderStats()`, die **geen nieuwe opslag** gebruikt: alles wordt
+berekend uit de scores die je al opslaat via het resultaatscherm (`loadScores()` uit
+`storage.js`). Berekent:
+
+- Aantal opgeslagen pogingen, aantal verschillende gespeelde quizzes
+- Gemiddelde score, beste score (met quiznaam)
+- Totale speeltijd (via `formatTime()`)
+- Een tabel met per quiz je beste score, aantal keer gespeeld en beste tijd
+
+Speel je een quiz zonder de score op te slaan, dan telt die run hier niet mee — precies
+zoals bij het leaderboard.
+
+### 📄 index.html — nieuwe onderdelen
+
+- Nieuwe navigatielink "Statistieken" en nieuwe knop `#themeToggle` in de header.
+- `tpl-home` uitgebreid met `#dailyQuizCard`, `#quizSearch` en `#categoryFilters`.
+- Nieuw template `tpl-stats` met `#statsCards` en `#statsTableWrap`.
+- Nieuw script-tag voor `js/views/stats.js`, correct tussen `helpers.js`/`storage.js` en
+  `app.js` in geladen (de laadvolgorde blijft cruciaal, zie eerder in dit document).
+
+### 🎨 css/style.css — nieuwe secties
+
+`.theme-toggle`, `.filter-bar` / `.quiz-search` / `.chips`, `.daily-quiz`, `.stats-cards` /
+`.stat-card`, `.confetti-layer` / `@keyframes confettiFall`, en een volledige
+`[data-theme="dark"]`-sectie die alle CSS-variabelen uit `:root` overschrijft voor de
+donkere modus — de rest van de opmaak hoefde niet aangepast te worden, omdat die overal al
+`var(--naam)` gebruikte in plaats van vaste kleuren.
